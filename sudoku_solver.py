@@ -72,7 +72,7 @@ class SudokuSolver:
 
         Returns: None
         """
-        if (len(array), len(array[0])) == (9, 9):
+        if not (len(array), len(array[0])) == (9, 9):
             raise UserWarning("The array input is not of valid dimensions.")
 
         self.board = np.array(array)

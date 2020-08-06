@@ -1,7 +1,11 @@
 """Tests for the sudoku solver."""
+
+
 from sudoku_solver import SudokuSolver
+from pytest import raises
 
 solver = SudokuSolver()
+
 prob_array = [[0, 0, 0, 2, 6, 0, 7, 0, 1],
               [6, 8, 0, 0, 7, 0, 0, 9, 0],
               [1, 9, 0, 0, 0, 4, 5, 0, 0],
@@ -40,10 +44,9 @@ def test_board():
 
 
 def test_valid_board_wrong_1():
-    # TODO: Check for error raised as 0 is present.
-    # solver.set_board(prob_array)
-    # assert not solver.valid_board()
-    pass
+    solver.set_board(prob_array)
+    with raises(UserWarning):
+        solver.valid_board()
 
 
 def test_valid_board_right():
