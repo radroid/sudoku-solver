@@ -72,7 +72,9 @@ class SudokuSolver:
 
         Returns: None
         """
-        # TODO: Add check for right array dimensions
+        if (len(array), len(array[0])) == (9, 9):
+            raise UserWarning("The array input is not of valid dimensions.")
+
         self.board = np.array(array)
         self.__set_blocks()
 
@@ -85,11 +87,9 @@ class SudokuSolver:
             (bool): Is the board is solved. True if all constrains are met.
             (int): Row, Column or Block number where there is an error.
         """
-        # TODO: Raise an error if the board is not complete.
         if 0 in self.board:
-            raise(UserWarning,
-                  "The board is not complete as there are 0's present"
-                  " on the board.")
+            raise UserWarning("The board is not complete as there are 0's "
+                              "present on the board.")
 
         for i in range(9):
             is_valid = self.has_only_unique(
@@ -131,13 +131,15 @@ class SudokuSolver:
         Ignores value 0.
 
         Args:
+            *list_of_nums (iterable of int): Can be any number of iterables
+                                             containing the numbers of the
+                                             checked.
             ignore (tuple of int): the integer values to be ignored.
 
         Returns:
             (bool): Are all the values unique? (Ignoring the values in ignore)
                     True if there are no duplicate values.
         """
-        # TODO: Add check for the type of *args.
         for num_list in list_of_nums:
             values = []
             for num in num_list:
