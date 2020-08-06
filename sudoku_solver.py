@@ -8,6 +8,9 @@
 source: 'Back to Back SWE' - YouTube channel.
 [https://www.youtube.com/channel/UCmJz2DV1a3yfgrR7GqRtUUA]
 
+ * The video is just a reference, the code used here is not a copy of it. It is
+   written with my understanding of backtracking.
+
 The algorithm uses recursion to solve the board in a more efficient way than
 going through all the possibilities.
 """
@@ -29,24 +32,33 @@ class SudokuSolver:
         self.blocks = []
         self.board = np.array([])
 
-    def solver(self, row, col):
+    def solver(self, row=0, col=0):
         """Main function used to solve the board.
         The function solves the board row-wise.
 
         Args:
-            row (int): row number.
-            col (int): column number.
+            row (int): row number (index starts from 0).
+            col (int): column number (index starts from 0).
 
         Returns:
             (bool): 'True' if the number does not break any of the constrains.
         """
-        # TODO: Create a breakpoint for end of the row.
-        # TODO: Create a condition to know board is solved
+        if row == 9:
+            return True
 
-        # TODO: Fill cell and check if constrains violated
+        if col == 9:
+            return self.solver(row + 1, 0)
+        elif self.board[row, col] != 0:
+            return self.solver(row, col + 1)
+        else:
+            for i in range(1, 10):
+                self.update_board(row, col, i)
 
-        # TODO: Remove entry if constrains violated.
-        pass
+                if self.valid_entry(row, col):
+                    if self.solver(row, col + 1):
+                        return True
+
+            self.update_board(row, col, 0)
 
     def set_board(self, array):
         """Sets up the board with the input array.
@@ -62,6 +74,7 @@ class SudokuSolver:
         """
         # TODO: Add check for right array dimensions
         self.board = np.array(array)
+        self.__set_blocks()
 
     def valid_board(self):
         """Checks if the current board follows all the constrains.
@@ -74,12 +87,15 @@ class SudokuSolver:
         """
         # TODO: Raise an error if the board is not complete.
         if 0 in self.board:
-            pass
+            raise(UserWarning,
+                  "The board is not complete as there are 0's present"
+                  " on the board.")
 
         for i in range(9):
-            is_valid = self.has_only_unique(self.board[i, :],  # row check
-                                            self.board[:, i],  # col check
-                                            self.blocks[i])    # block check
+            is_valid = self.has_only_unique(
+                self.board[i, :].tolist(),              # row check
+                self.board[:, i].tolist(),              # col check
+                self.blocks[i].reshape(1, 9).tolist())  # block check
             if not is_valid:
                 return False, i
 
@@ -133,7 +149,7 @@ class SudokuSolver:
                     values.append(num)
         return True
 
-    def set_blocks(self):
+    def __set_blocks(self):
         """Sets up nine blocks as seen on a Sudoku board."""
         blocks = []
         board = self.board
@@ -160,4 +176,3 @@ class SudokuSolver:
         b_row, b_col = row - (row // 3 * 3), col - (col // 3 * 3)
 
         self.blocks[block_num][b_row, b_col] = value
-

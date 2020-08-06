@@ -40,54 +40,59 @@ def test_board():
 
 
 def test_valid_board_wrong_1():
+    # TODO: Check for error raised as 0 is present.
+    # solver.set_board(prob_array)
+    # assert not solver.valid_board()
     pass
-    solver.set_board(prob_array)
-    assert not solver.valid_board()
 
 
 def test_valid_board_right():
-    pass
-    # solver.set_board(sol_array)
-    # assert solver.valid_board()
+    solver.set_board(sol_array)
+    assert solver.valid_board()
 
 
 def test_valid_board_wrong_2():
-    pass
-    # solver.set_board(wrong_array)
-    # assert not solver.valid_board()
+    solver.set_board(wrong_array)
+    result = solver.valid_board()
+    assert not result[0]
 
 
-def setup_has_only():
+def setup_prob():
     """Sets up the board to be tested for the next four tests of
     has_only_unique."""
     solver.set_board(prob_array)
-    solver.set_blocks()
 
 
 def test_has_only_unique_true_1():
-    solver.set_board(prob_array)
-    solver.set_blocks()
+    setup_prob()
     block1 = solver.blocks[0].reshape(1, 9)[0].tolist()
     block2 = solver.blocks[3].reshape(1, 9)[0].tolist()
     assert solver.has_only_unique(block1, block2)
 
 
 def test_has_only_unique_true_2():
-    setup_has_only()
+    setup_prob()
     block1 = solver.blocks[0].reshape(1, 9)[0].tolist()
     block2 = [9, 1, 4, 2, 5, 6, 6, 7, 8]
     assert solver.has_only_unique(block1, block2, ignore=(0, 6))
 
 
 def test_has_only_unique_false_1():
-    setup_has_only()
+    setup_prob()
     block1 = solver.blocks[0].reshape(1, 9)[0].tolist()
     block2 = solver.blocks[3].reshape(1, 9)[0].tolist()
     assert not solver.has_only_unique(block1, block2, ignore=())
 
 
 def test_has_only_unique_false_2():
-    setup_has_only()
+    setup_prob()
     block1 = solver.blocks[0].reshape(1, 9)[0].tolist()
     block2 = [9, 1, 4, 2, 5, 6, 6, 7, 8]
     assert not solver.has_only_unique(block1, block2)
+
+
+def test_solver():
+    setup_prob()
+    solver.solver(0, 0)
+    result = solver.board == sol_array
+    assert result.all()
