@@ -32,7 +32,7 @@ class SudokuSolver:
         self.blocks = []
         self.board = np.array([])
 
-    def solver(self, row=0, col=0):
+    def solve_board(self, row=0, col=0):
         """Main function used to solve the board.
         The function solves the board row-wise.
 
@@ -47,15 +47,15 @@ class SudokuSolver:
             return True
 
         if col == 9:
-            return self.solver(row + 1, 0)
+            return self.solve_board(row + 1, 0)
         elif self.board[row, col] != 0:
-            return self.solver(row, col + 1)
+            return self.solve_board(row, col + 1)
         else:
             for i in range(1, 10):
                 self.update_board(row, col, i)
 
                 if self.valid_entry(row, col):
-                    if self.solver(row, col + 1):
+                    if self.solve_board(row, col + 1):
                         return True
 
             self.update_board(row, col, 0)

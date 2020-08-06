@@ -96,6 +96,6 @@ def test_has_only_unique_false_2():
 
 def test_solver():
     setup_prob()
-    solver.solver(0, 0)
+    solver.solve_board(0, 0)
     result = solver.board == sol_array
     assert result.all()
